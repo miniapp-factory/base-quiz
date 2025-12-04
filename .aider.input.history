@@ -218,3 +218,247 @@
 
 # 2025-12-04 13:05:34.340405
 +apply changes
+
+# 2025-12-04 13:38:43.762114
++**Title:** Bubble Launcher V3 (Mini Space Mode)
++**Description:** A simple turn-based bubble launcher. The player chooses a column to launch the next bubble. If 3 or more connected bubbles of the same color match, they are cleared. No gravity. Game ends when a column is full. A Restart button resets the game.
++**Category:** Game, Puzzle
++**Style:** Emoji Grid
++
++---
++
++## **STATE (Persistent State)**
++
++The app must maintain:
++
++* `score` (number, start = 0)
++* `gameOver` (boolean, start = false)
++* `gridHeight` = 8
++* `gridWidth` = 6
++* `colors` = ["🔴","🟢","🔵","🟡","🟣"]
++* `grid` = 8×6 array filled with `null`
++* `nextBubble` (string)
++
++---
++
++## **ON APP LOAD**
++
++The app MUST automatically call `initGame()`.
++
++### **initGame():**
++
++* Set `score = 0`, `gameOver = false`
++* Create an 8×6 grid filled with `null`
++* Fill **only row 0 and row 1** with random colors from `colors`
++* Ensure no initial matches of 3+ exist in these two rows
++* Call `generateNextBubble()`
++* Force UI re-render
++
++---
++
++## **CORE FUNCTIONS**
++
++### **generateNextBubble()**
++
++* `nextBubble = random(colors)`
++
++---
++
++### **restartGame()**
++
++* Calls `initGame()` (resets all state as described)
++* Force UI re-render
++
++---
++
++### **launchBubble(colIndex)**
++
++Called when the user selects a column (0–5).
++
++1. If `gameOver == true`, ignore the action (user can instead press Restart)
++2. Scan the selected column from **bottom (row 7)** upward
++
++   * Find the first non-null cell → this is `R`
++   * If the column is fully empty → set `R = gridHeight (8)`
++3. Compute target position:
++
++   * `R_target = R - 1`
++   * If `R_target < 0`, set `gameOver = true` and STOP
++4. Place the bubble:
++
++   * `grid[R_target][colIndex] = nextBubble`
++5. Check matches:
++
++   * Call `checkForMatches(R_target, colIndex)`
++   * If a connected group of **3 or more** matching colors is found:
++
++     * `score += 10`
++     * Set all matched cells to `null`
++6. Call `generateNextBubble()`
++7. Force immediate UI re-render
++
++---
++
++## **MATCH FUNCTION (Simplified)**
++
++### **checkForMatches(row, col):**
++
++* Starting from the placed bubble, find all connected (up/down/left/right) bubbles of the same color
++* If the group size ≥ 3 → return the list of cells to clear
++* Otherwise return an empty list
++
++> **Important:** No gravity, no falling, no chain reactions.
++
++---
++
++## **UI REQUIREMENTS (Always Visible)**
++
++* Show: `Score: [score]`
++* Show: `Next Bubble: [nextBubble]`
++* Display the full 8×6 grid
++
++  * Use the emoji color for bubbles
++  * Use blank or neutral symbol for `null`
++* Display 6 column buttons labeled 1–6
++
++  * Button 1 → `launchBubble(0)`
++  * Button 2 → `launchBubble(1)`
++  * …
++  * Button 6 → `launchBubble(5)`
++* Display a **Restart** button (always visible) → calls `restartGame()`
++* If `gameOver == true`:
++
++  * Show `"GAME OVER — Final Score: [score]"` prominently
++  * Keep the Restart button visible so the player can immediately restart
++
++---
++
++## **CRITICAL RESTRICTIONS**
++
++* NO gravity
++* NO falling clusters
++* NO complex physics
++* Only immediate match-clearing
++* Column becomes full → game over (player can press Restart to play again)
+
+# 2025-12-04 13:38:43.762833
++**Title:** Bubble Launcher V3 (Mini Space Mode)
++**Description:** A simple turn-based bubble launcher. The player chooses a column to launch the next bubble. If 3 or more connected bubbles of the same color match, they are cleared. No gravity. Game ends when a column is full. A Restart button resets the game.
++**Category:** Game, Puzzle
++**Style:** Emoji Grid
++
++---
++
++## **STATE (Persistent State)**
++
++The app must maintain:
++
++* `score` (number, start = 0)
++* `gameOver` (boolean, start = false)
++* `gridHeight` = 8
++* `gridWidth` = 6
++* `colors` = ["🔴","🟢","🔵","🟡","🟣"]
++* `grid` = 8×6 array filled with `null`
++* `nextBubble` (string)
++
++---
++
++## **ON APP LOAD**
++
++The app MUST automatically call `initGame()`.
++
++### **initGame():**
++
++* Set `score = 0`, `gameOver = false`
++* Create an 8×6 grid filled with `null`
++* Fill **only row 0 and row 1** with random colors from `colors`
++* Ensure no initial matches of 3+ exist in these two rows
++* Call `generateNextBubble()`
++* Force UI re-render
++
++---
++
++## **CORE FUNCTIONS**
++
++### **generateNextBubble()**
++
++* `nextBubble = random(colors)`
++
++---
++
++### **restartGame()**
++
++* Calls `initGame()` (resets all state as described)
++* Force UI re-render
++
++---
++
++### **launchBubble(colIndex)**
++
++Called when the user selects a column (0–5).
++
++1. If `gameOver == true`, ignore the action (user can instead press Restart)
++2. Scan the selected column from **bottom (row 7)** upward
++
++   * Find the first non-null cell → this is `R`
++   * If the column is fully empty → set `R = gridHeight (8)`
++3. Compute target position:
++
++   * `R_target = R - 1`
++   * If `R_target < 0`, set `gameOver = true` and STOP
++4. Place the bubble:
++
++   * `grid[R_target][colIndex] = nextBubble`
++5. Check matches:
++
++   * Call `checkForMatches(R_target, colIndex)`
++   * If a connected group of **3 or more** matching colors is found:
++
++     * `score += 10`
++     * Set all matched cells to `null`
++6. Call `generateNextBubble()`
++7. Force immediate UI re-render
++
++---
++
++## **MATCH FUNCTION (Simplified)**
++
++### **checkForMatches(row, col):**
++
++* Starting from the placed bubble, find all connected (up/down/left/right) bubbles of the same color
++* If the group size ≥ 3 → return the list of cells to clear
++* Otherwise return an empty list
++
++> **Important:** No gravity, no falling, no chain reactions.
++
++---
++
++## **UI REQUIREMENTS (Always Visible)**
++
++* Show: `Score: [score]`
++* Show: `Next Bubble: [nextBubble]`
++* Display the full 8×6 grid
++
++  * Use the emoji color for bubbles
++  * Use blank or neutral symbol for `null`
++* Display 6 column buttons labeled 1–6
++
++  * Button 1 → `launchBubble(0)`
++  * Button 2 → `launchBubble(1)`
++  * …
++  * Button 6 → `launchBubble(5)`
++* Display a **Restart** button (always visible) → calls `restartGame()`
++* If `gameOver == true`:
++
++  * Show `"GAME OVER — Final Score: [score]"` prominently
++  * Keep the Restart button visible so the player can immediately restart
++
++---
++
++## **CRITICAL RESTRICTIONS**
++
++* NO gravity
++* NO falling clusters
++* NO complex physics
++* Only immediate match-clearing
++* Column becomes full → game over (player can press Restart to play again)
