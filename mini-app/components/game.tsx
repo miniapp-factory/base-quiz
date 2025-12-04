@@ -73,15 +73,13 @@ export default function Game() {
 
   const launchBubble = (colIndex: number) => {
     if (gameOver) return;
-    let R = gridHeight;
-    for (let r = gridHeight - 1; r >= 0; r--) {
-      if (grid[r][colIndex] !== null) {
-        R = r;
-        break;
+    let R_target: number | null = null;
+    for (let r = 0; r < gridHeight; r++) {
+      if (grid[r][colIndex] === null && R_target === null) {
+        R_target = r;
       }
     }
-    const R_target = R - 1;
-    if (R_target < 0) {
+    if (R_target === null) {
       setGameOver(true);
       return;
     }
