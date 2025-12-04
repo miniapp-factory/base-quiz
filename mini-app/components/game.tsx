@@ -34,6 +34,9 @@ export default function Game() {
     setGrid(newGrid);
     generateNextBubble();
   };
+  const restartGame = () => {
+    initGame();
+  };
 
   const hasMatch = (g: (string | null)[][], r: number, c: number, color: string) => {
     // horizontal
@@ -140,6 +143,9 @@ export default function Game() {
             </div>
           ))
         )}
+      </div>
+      <div className="flex justify-center mt-2">
+        <Button onClick={restartGame}>Restart</Button>
       </div>
       <div className="flex gap-2">
         {[...Array(gridWidth)].map((_, idx) => (
