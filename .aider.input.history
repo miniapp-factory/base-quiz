@@ -462,3 +462,231 @@
 +* NO complex physics
 +* Only immediate match-clearing
 +* Column becomes full → game over (player can press Restart to play again)
+
+# 2025-12-04 15:49:54.375838
++# 🚀 **Bubble Launcher V5 — Stable Vertical Placement Edition**
++
++**Title:** Bubble Launcher V5 (Stable Placement Mode)
++**Description:** Turn-based bubble launcher with correct stacking. A launched bubble always lands in the **highest empty cell** of the selected column. Matching 3+ identical bubbles clears them. No gravity. Game ends when a column is full.
++**Category:** Game, Puzzle
++**Style:** Emoji Grid
++
++---
++
++## **STATE**
++
++* `score = 0`
++* `gameOver = false`
++* `gridHeight = 8`
++* `gridWidth = 6`
++* `colors = ["🔴","🟢","🔵","🟡","🟣"]`
++* `grid = 8×6 array filled with null`
++* `nextBubble` (string)
++
++---
++
++## **ON APP LOAD**
++
++Call `initGame()`:
++
++### **initGame():**
++
++* Reset score and gameOver
++* Create empty 8×6 grid
++* Fill only row 0 and row 1 with random colors (no initial matches)
++* Call `generateNextBubble()`
++* Render UI
++
++---
++
++## **CORE FUNCTIONS**
++
++### **generateNextBubble()**
++
++`nextBubble = random(colors)`
++
++---
++
++# 🔥 **CRITICAL FIX — Correct Placement Logic**
++
++### ✔ This is the key section that was missing.
++
++### ✔ This makes bubbles stack correctly.
++
++### **launchBubble(colIndex)**
++
++1. If `gameOver == true`, ignore input
++2. Set `R_target = null`
++3. **Find the highest empty cell from top to bottom:**
++
++```
++For row 0 to row 7:
++    if grid[row][colIndex] == null AND R_target is null:
++        R_target = row
++```
++
++4. **If no empty cell found:**
++
++* `gameOver = true`
++* STOP
++
++5. **Place bubble:**
++   `grid[R_target][colIndex] = nextBubble`
++   *(Never overwrite any existing bubble)*
++
++6. **Check for matches:**
++
++* Call `checkForMatches(R_target, colIndex)`
++* If group size ≥ 3:
++
++  * `score += 10`
++  * Set all matched cells to null
++
++7. Call `generateNextBubble()`
++8. Re-render UI
++
++---
++
++# ✔ **MATCH FUNCTION**
++
++Simple flood-fill from (row, col) in 4 directions.
++Matches only if size ≥ 3.
++No gravity, no extra logic.
++
++---
++
++# 🎨 **UI**
++
++Always show:
++
++* `Score: [score]`
++* `Next: [nextBubble]`
++* 8×6 grid (emoji or blank for null)
++* Column buttons:
++
++  * Button 1 → `launchBubble(0)`
++  * …
++  * Button 6 → `launchBubble(5)`
++* Restart button → `restartGame()`
++* If `gameOver == true`:
++  show `"GAME OVER — Final Score: [score]"`
++
++---
++
++## **restartGame()**
++
++Call `initGame()` and re-render.
+
+# 2025-12-04 15:49:54.376242
++# 🚀 **Bubble Launcher V5 — Stable Vertical Placement Edition**
++
++**Title:** Bubble Launcher V5 (Stable Placement Mode)
++**Description:** Turn-based bubble launcher with correct stacking. A launched bubble always lands in the **highest empty cell** of the selected column. Matching 3+ identical bubbles clears them. No gravity. Game ends when a column is full.
++**Category:** Game, Puzzle
++**Style:** Emoji Grid
++
++---
++
++## **STATE**
++
++* `score = 0`
++* `gameOver = false`
++* `gridHeight = 8`
++* `gridWidth = 6`
++* `colors = ["🔴","🟢","🔵","🟡","🟣"]`
++* `grid = 8×6 array filled with null`
++* `nextBubble` (string)
++
++---
++
++## **ON APP LOAD**
++
++Call `initGame()`:
++
++### **initGame():**
++
++* Reset score and gameOver
++* Create empty 8×6 grid
++* Fill only row 0 and row 1 with random colors (no initial matches)
++* Call `generateNextBubble()`
++* Render UI
++
++---
++
++## **CORE FUNCTIONS**
++
++### **generateNextBubble()**
++
++`nextBubble = random(colors)`
++
++---
++
++# 🔥 **CRITICAL FIX — Correct Placement Logic**
++
++### ✔ This is the key section that was missing.
++
++### ✔ This makes bubbles stack correctly.
++
++### **launchBubble(colIndex)**
++
++1. If `gameOver == true`, ignore input
++2. Set `R_target = null`
++3. **Find the highest empty cell from top to bottom:**
++
++```
++For row 0 to row 7:
++    if grid[row][colIndex] == null AND R_target is null:
++        R_target = row
++```
++
++4. **If no empty cell found:**
++
++* `gameOver = true`
++* STOP
++
++5. **Place bubble:**
++   `grid[R_target][colIndex] = nextBubble`
++   *(Never overwrite any existing bubble)*
++
++6. **Check for matches:**
++
++* Call `checkForMatches(R_target, colIndex)`
++* If group size ≥ 3:
++
++  * `score += 10`
++  * Set all matched cells to null
++
++7. Call `generateNextBubble()`
++8. Re-render UI
++
++---
++
++# ✔ **MATCH FUNCTION**
++
++Simple flood-fill from (row, col) in 4 directions.
++Matches only if size ≥ 3.
++No gravity, no extra logic.
++
++---
++
++# 🎨 **UI**
++
++Always show:
++
++* `Score: [score]`
++* `Next: [nextBubble]`
++* 8×6 grid (emoji or blank for null)
++* Column buttons:
++
++  * Button 1 → `launchBubble(0)`
++  * …
++  * Button 6 → `launchBubble(5)`
++* Restart button → `restartGame()`
++* If `gameOver == true`:
++  show `"GAME OVER — Final Score: [score]"`
++
++---
++
++## **restartGame()**
++
++Call `initGame()` and re-render.
